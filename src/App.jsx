@@ -1,37 +1,24 @@
 import './App.css'
-import { ReactReduxContext } from 'react-redux';
-import { createStoreHook } from 'react-redux';
-
-//redux
-const CHANGE ='CHANGE';
-const changePreview = (text)=>{
-  return {
-    type: CHANGE,
-    text: text
-  }
-};
-const changeReducer = (state=[],action)=>{
-  switch(action.type){
-    case CHANGE:
-      return [...state,
-        action.text
-      ]
-    default: return state;      
-  }
-}
-const store = createStoreHook(changeReducer);
-
+import { useSelector,useDispatch } from 'react-redux'
+import { change,selectText } from './features/markdownSlice'
 //react
-const Provider = ReactReduxContext.Provider;
-const connect = ReactReduxContext.connect;
 function App() {
+  const markdownText = useSelector(selectText)
+  const dispatch = useDispatch();
   return (
     <>
-      <div id="editorWrapper">  
-        <textarea id="editor"></textarea>
+      <div id="editorWrapper" className='container py-5'>  
+        <div className="card">
+          <h5 className="card-header">Editor</h5>  
+          <textarea id="editor" className='card-body form-control 'onChange={e=>dispatch(change(e.target.value))}>{markdownText}</textarea>
+        </div>
       </div>
-      <div id="previewWrapper">
-        <div id="preview"></div>
+      
+      <div id="previewWrapper" className='container'>
+        <div className='card'>
+        <h5 className='card-header'>Preview</h5>
+        <div id="preview" className='card-body'>{markdownText}</div>
+        </div>
       </div>
     </>
   )
