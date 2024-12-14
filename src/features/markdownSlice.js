@@ -12,7 +12,9 @@ export const markdownSlice = createSlice({
     },
   },
 });
-
+marked.use({
+  breaks: true,
+});
 export const { change } = markdownSlice.actions;
 export const selectText = (state) => state.markdown.text;
 export const getText = (state) => marked.parse(state.markdown.text);
